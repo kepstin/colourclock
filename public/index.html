@@ -76,7 +76,7 @@ function doClockStuff() {
 	clockDisplay.textContent = date.toLocaleTimeString({"hour12": false});
 
 	var colourDisplay = document.getElementById("colour");
-	colourDisplay.textContent = rgb2hex(document.body.style.backgroundColor);
+	colourDisplay.textContent = rgb2hex(document.body.style.color) + " on " + rgb2hex(document.body.style.backgroundColor);
 }
 var abootVisible = false;
 function toggleAboot() {
