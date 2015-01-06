@@ -58,11 +58,31 @@ Saturation: Radius=45 to Radius=15
 Foreground: Add 20 to L
 -->
 		<script>
+var zone=null;
+function setupZone() {
+	if (document.location.hash.length > 1) {
+		var zoneName = document.location.hash.substring(1);
+		var zoneWarningT = document.getElementById("zoneWarning");
+		if (!!moment.tz.zone(zoneName)) {
+			zone = zoneName;
+			zoneWarningT.style.display = "none";
+		} else {
+			var zoneNameT = document.getElementById("zoneName");
+			zoneNameT.textContent = zoneName;
+			zoneWarningT.style.display = "block";
+			zone = null;
+		}
+	}
+}
 function doClockStuff() {
-	var date = new Date();
-	var hours = date.getHours();
-	var minutes = date.getMinutes();
-	var seconds = date.getSeconds();
+	var date = new moment();
+	if (!!zone) {
+		date.tz(zone);
+	}
+
+	var hours = date.hour();
+	var minutes = date.minute();
+	var seconds = date.second();
 
 	var hue = ((hours * 60 + minutes) * 60 + seconds) / 86400 * 2 * Math.PI;
 	var radius = 30 + (Math.cos(seconds / 30 * Math.PI) * 15);
@@ -78,7 +98,7 @@ function doClockStuff() {
 	document.body.style.color = fgcolour;
 
 	var clockDisplay = document.getElementById("clock");
-	clockDisplay.textContent = date.toLocaleTimeString({"hour12": false});
+	clockDisplay.textContent = date.format("HH:mm:ss");
 
 	var colourDisplay = document.getElementById("colour");
 	colourDisplay.textContent = fgcolour + " on " + bgcolour;
@@ -122,16 +142,22 @@ function toggleClock() {
 		<header>
 			<h1 id="clock">&nbsp;</h1>
 			<p><span id="colour"></span></p>
-			<p><a href="#" onclick="toggleAboot(); return false;">about</a></p>
-			<p><a href="#" onclick="toggleClock(); return false;">clock</a></p>
+			<p><a href="#aboot" onclick="toggleAboot(); return false;">about</a></p>
+			<p><a href="#clock" onclick="toggleClock(); return false;">clock</a></p>
 		</header>
+		<section id="zoneWarning" style="display:none">
+			<p>I don't know how to tell time in the time zone "<span id="zoneName"></span>", you're getting local time instead.</p>
+		</section>
 		<section id="aboot" style="display:none">
 			<p>It's a work of art. Or, if you rather, a clock.<p>
 			<p>It's pretty simple. The time of day sets the colour, while the minute sets the lightness (bright on the hour, becoming dim) and the second sets the saturation (saturated on the minute, becoming dull).</p>
 			<p>If you get really good, you can probably tell the approximate time from the colour alone. Good luck!</p>
+			<p>You can set a time zone by adding a #TimezoneName to the URL. Try <a href="#UTC">#UTC</a> or <a href="#Canada/Eastern">#Canada/Eastern</a></p>
 		</section>
 		<footer>Copyright ⓒ 2015 Calvin Walton, released under the terms of the <a href="copying.txt">WTFPL-2</a> license – Inspired by <a href="http://whatcolourisit.scn9a.org/">What colour is it?</a> – Fork it on <a href="https://github.com/kepstin/colourclock">Github</a></footer>
 		<script>
+			setupZone();
+			window.onhashchange = setupZone;
 			doClockStuff();
 			window.setInterval(doClockStuff, 1000);
 		</script>
