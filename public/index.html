@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Colour Clock</title>
+		<link href='http://fonts.googleapis.com/css?family=Iceland' rel='stylesheet' type='text/css'>
+		<style>
+body {
+	background: #000;
+	font-family: Helvetica, Arial, sans-serif;
+}
+header {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background: rgba(255,255,255,0.5);
+	color: #000;
+	padding: 0.5em;
+	min-width: 33%;
+	text-align: center;
+}
+#aboot {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	background: rgba(255,255,255,0.5);
+	color: #000;
+	padding: 0.5em;
+}
+#clock {
+	font-size: 3em;
+	font-family: "Iceland", serif;
+}
+#colour {
+	font-size: 1.2em;
+	font-family: Inconsolata, Consolas, monospace;
+}
+footer {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background: rgba(255,255,255,0.5);
+	color: #000;
+	padding: 0.5em;
+}
+		</style>
+		<script>
+function rgb2hex(rgb) {
+    if (/^#[0-9A-F]{6}$/i.test(rgb)) return rgb;
+
+    rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+    function hex(x) {
+        return ("0" + parseInt(x).toString(16)).slice(-2);
+    }
+    return "#" + hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
+}
+function doClockStuff() {
+	var date = new Date();
+	var hours = date.getHours();
+	var minutes = date.getMinutes();
+	var seconds = date.getSeconds();
+
+	var hue = Math.round(((hours * 60 + minutes) * 60 + seconds) / 240);
+	var saturation = 80 - seconds;
+	var lightness = 80 - minutes;
+
+	var colour = "hsl(" + hue + "," + saturation + "%," + lightness + "%)";
+	document.body.style.backgroundColor = colour;
+
+	var clockDisplay = document.getElementById("clock");
+	clockDisplay.textContent = date.toLocaleTimeString({"hour12": false});
+
+	var colourDisplay = document.getElementById("colour");
+	colourDisplay.textContent = rgb2hex(document.body.style.backgroundColor);
+}
+var abootVisible = false;
+function toggleAboot() {
+	var aboot = document.getElementById('aboot');
+	if (abootVisible) {
+		aboot.style.display="none";
+		abootVisible = false;
+	} else {
+		aboot.style.display="block";
+		abootVisible = true;
+	}
+}
+		</script>
+	</head>
+	<body>
+		<noscript>
+			<h1>Colour Clock</h1>
+			<p>In order to see the awesomeness of the colour clock, you’re going to have to use a web browser with Javascript enabled.</p>
+		</noscript>
+		<header>
+			<h1 id="clock">&nbsp;</h1>
+			<p><code id="colour"></code></p>
+			<p><a href="#" onclick="toggleAboot(); return false;">about</a></p>
+		</header>
+		<section id="aboot" style="display:none">
+			<p>It's a work of art. Or, if you rather, a clock.<p>
+			<p>It's pretty simple. The time of day sets the colour, while the minute sets the lightness (bright on the hour, becoming dim) and the second sets the saturation (saturated on the minute, becoming dull).</p>
+			<p>If you get really good, you can probably tell the approximate time from the colour alone. Good luck!</p>
+		</section>
+		<footer>Copyright ⓒ 2015 Calvin Walton, under the terms of the <a href="copying.txt">WTFPL-2</a> license.</footer>
+		<script>
+			doClockStuff();
+			window.setInterval(doClockStuff, 1000);
+		</script>
+	</body>
+</html>
