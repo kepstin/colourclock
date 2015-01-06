@@ -50,38 +50,44 @@ footer {
 	padding: 0.5em;
 }
 		</style>
+		<script src="colors.js"></script>
+<!--
+Brightness: L=70 to L=10
+Saturation: Radius=45 to Radius=15
+Foreground: Add 20 to L
+-->
 		<script>
-function rgb2hex(rgb) {
-    if (/^#[0-9A-F]{6}$/i.test(rgb)) return rgb;
-
-    rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
-    function hex(x) {
-        return ("0" + parseInt(x).toString(16)).slice(-2);
-    }
-    return "#" + hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
-}
 function doClockStuff() {
 	var date = new Date();
 	var hours = date.getHours();
 	var minutes = date.getMinutes();
 	var seconds = date.getSeconds();
 
-	var hue = Math.round(((hours * 60 + minutes) * 60 + seconds) / 240);
-	var bgsat = 100 - seconds;
-	var bglight = 75 - minutes;
-	var fgsat = 25 + seconds;
-	var fglight = 100 - minutes;
+	var hue = ((hours * 60 + minutes) * 60 + seconds) / 86400 * 2 * Math.PI;
+	var radius = 45 - (seconds / 2);
+	var a = Math.sin(hue) * radius;
+	var b = Math.cos(hue) * radius;
+	var bg_l = 70 - (minutes * 60 + seconds) / 60;
+	var fg_l = bg_l + 20;
 
-	var bgcolour = "hsl(" + hue + "," + bgsat + "%," + bglight + "%)";
-	var fgcolour = "hsl(" + hue + "," + fgsat + "%," + fglight + "%)";
-	document.body.style.color = fgcolour;
+	var bgcolour = hexrgb($c.Lab(bg_l, a, b).sRGB8());
+	var fgcolour = hexrgb($c.Lab(fg_l, a, b).sRGB8());
+
 	document.body.style.backgroundColor = bgcolour;
+	document.body.style.color = fgcolour;
 
 	var clockDisplay = document.getElementById("clock");
 	clockDisplay.textContent = date.toLocaleTimeString({"hour12": false});
 
 	var colourDisplay = document.getElementById("colour");
-	colourDisplay.textContent = rgb2hex(document.body.style.color) + " on " + rgb2hex(document.body.style.backgroundColor);
+	colourDisplay.textContent = fgcolour + " on " + bgcolour;
+}
+function hexrgb(rgb) {
+	function hex(x) {
+		x = Math.round(Math.min(Math.max(x, 0), 255));
+		return ("0" + x.toString(16)).slice(-2);
+	}
+	return "#" + hex(rgb.r) + hex(rgb.g) + hex(rgb.b);
 }
 var abootVisible = false;
 function toggleAboot() {
