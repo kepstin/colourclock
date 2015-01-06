@@ -94,6 +94,17 @@ function toggleAboot() {
 		abootVisible = true;
 	}
 }
+var clockVisible = true;
+function toggleClock() {
+	var clock = document.getElementById('clock');
+	if (clockVisible) {
+		clock.style.visibility = "hidden";
+		clockVisible = false;
+	} else {
+		clock.style.visibility = "visible";
+		clockVisible = true;
+	}
+}
 		</script>
 	</head>
 	<body>
@@ -105,6 +116,7 @@ function toggleAboot() {
 			<h1 id="clock">&nbsp;</h1>
 			<p><span id="colour"></span></p>
 			<p><a href="#" onclick="toggleAboot(); return false;">about</a></p>
+			<p><a href="#" onclick="toggleClock(); return false;">clock</a></p>
 		</header>
 		<section id="aboot" style="display:none">
 			<p>It's a work of art. Or, if you rather, a clock.<p>
