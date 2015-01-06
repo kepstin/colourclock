@@ -1,2 +1,4 @@
 public/*.gz
+public/concat.js
 node_modules
+bower_components
