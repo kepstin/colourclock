@@ -84,7 +84,7 @@ function doClockStuff() {
 	var minutes = date.minute();
 	var seconds = date.second();
 
-	var hue = ((hours * 60 + minutes) * 60 + seconds) / 86400 * 2 * Math.PI;
+	var hue = (((hours - 3) * 60 + minutes) * 60 + seconds) / 86400 * 2 * Math.PI;
 	var radius = 30 + (Math.cos(seconds / 30 * Math.PI) * 15);
 	var a = -Math.sin(hue) * radius;
 	var b = Math.cos(hue) * radius;
