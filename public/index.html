@@ -64,7 +64,7 @@ function doClockStuff() {
 	var hue = Math.round(((hours * 60 + minutes) * 60 + seconds) / 240);
 	var bgsat = 100 - seconds;
 	var bglight = 75 - minutes;
-	var fgsat = 15 + seconds;
+	var fgsat = 25 + seconds;
 	var fglight = 100 - minutes;
 
 	var bgcolour = "hsl(" + hue + "," + bgsat + "%," + bglight + "%)";
