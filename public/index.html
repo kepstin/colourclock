@@ -64,10 +64,10 @@ function doClockStuff() {
 	var seconds = date.getSeconds();
 
 	var hue = ((hours * 60 + minutes) * 60 + seconds) / 86400 * 2 * Math.PI;
-	var radius = 45 - (seconds / 2);
+	var radius = 30 + (Math.cos(seconds / 30 * Math.PI) * 15);
 	var a = Math.sin(hue) * radius;
 	var b = Math.cos(hue) * radius;
-	var bg_l = 70 - (minutes * 60 + seconds) / 60;
+	var bg_l = 40 + (Math.cos((minutes * 60 + seconds) / 60 / 30 * Math.PI) * 30);
 	var fg_l = bg_l + 20;
 
 	var bgcolour = hexrgb($c.Lab(bg_l, a, b).sRGB8());
