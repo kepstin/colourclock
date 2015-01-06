@@ -3,47 +3,45 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>Colour Clock</title>
-		<link href='//fonts.googleapis.com/css?family=Iceland' rel='stylesheet' type='text/css'>
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
 		<style>
 body {
-	background: #000;
-	font-family: Helvetica, Arial, sans-serif;
+	background: #fff;
+	color: #000;
+	font-family: "Open Sans", Helvetica, Arial, sans-serif;
 }
 header {
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-	background: rgba(255,255,255,0.5);
-	color: #000;
 	padding: 0.5em;
 	min-width: 33%;
 	text-align: center;
+}
+a:link, a:visited {
+	color: inherit !important;
 }
 #aboot {
 	position: absolute;
 	top: 0;
 	left: 0;
 	right: 0;
-	background: rgba(255,255,255,0.5);
-	color: #000;
 	padding: 0.5em;
 }
 #clock {
-	font-size: 3em;
-	font-family: "Iceland", serif;
+	font-size: 8em;
+	font-weight: 300;
 }
 #colour {
-	font-size: 1.2em;
-	font-family: Inconsolata, Consolas, monospace;
+	font-size: 2em;
+	font-weight: 300;
 }
 footer {
 	position: absolute;
 	bottom: 0;
 	left: 0;
 	right: 0;
-	background: rgba(255,255,255,0.5);
-	color: #000;
 	padding: 0.5em;
 }
 		</style>
@@ -64,11 +62,15 @@ function doClockStuff() {
 	var seconds = date.getSeconds();
 
 	var hue = Math.round(((hours * 60 + minutes) * 60 + seconds) / 240);
-	var saturation = 80 - seconds;
-	var lightness = 80 - minutes;
+	var bgsat = 100 - seconds;
+	var bglight = 60 - minutes;
+	var fgsat = 60 - seconds;
+	var fglight = 100 - minutes;
 
-	var colour = "hsl(" + hue + "," + saturation + "%," + lightness + "%)";
-	document.body.style.backgroundColor = colour;
+	var bgcolour = "hsl(" + hue + "," + bgsat + "%," + bglight + "%)";
+	var fgcolour = "hsl(" + hue + "," + fgsat + "%," + fglight + "%)";
+	document.body.style.color = fgcolour;
+	document.body.style.backgroundColor = bgcolour;
 
 	var clockDisplay = document.getElementById("clock");
 	clockDisplay.textContent = date.toLocaleTimeString({"hour12": false});
@@ -96,7 +98,7 @@ function toggleAboot() {
 		</noscript>
 		<header>
 			<h1 id="clock">&nbsp;</h1>
-			<p><code id="colour"></code></p>
+			<p><span id="colour"></span></p>
 			<p><a href="#" onclick="toggleAboot(); return false;">about</a></p>
 		</header>
 		<section id="aboot" style="display:none">
