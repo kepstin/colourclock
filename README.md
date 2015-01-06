@@ -5,14 +5,14 @@ This is a simple clock that tells time by converting the time of day to
 a hue, then varying the lightness and saturation over the course of the
 hours and minutes
 
-(View it live to see what's up.)[https://colourclock.kepstin.ca/]
+[View it live to see what's up.](https://colourclock.kepstin.ca/)
 
 By default it displays local time, but you can set (nearly) any modern
 time zone by appending a fragment identifier, e.g.
-(#UTC)[https://colourclock.kepstin.ca/#UTC] or
-(#Canada/Eastern)[https://colourclock.kepstin.ca/#Canada/Eastern].
+[#UTC](https://colourclock.kepstin.ca/#UTC) or
+[#Canada/Eastern](https://colourclock.kepstin.ca/#Canada/Eastern).
 It should take any modern timezone name from the
-(IANA Time Zone Database)[http://en.wikipedia.org/wiki/Tz_database].
+[IANA Time Zone Database](http://en.wikipedia.org/wiki/Tz_database).
 
 Calculating the Colour
 ----------------------
@@ -57,7 +57,7 @@ used here 10 to 70.
 Now you have the L, a, and b values for the colour coordinates. You can
 convert these back to sRGB colour space for display by first converting the
 L\*a\*b\* to XYZ with the D65 illuminant, then converting the XYZ values to
-sRGB. See the colour library I'm using in [lib/colors.js] for details.
+sRGB. See the colour library I'm using in [lib/colors.js](lib/colors.js) for details.
 
 Note that I'm also rendering text above the background. For simplicity's sake,
 and to keep it readable, the text is rendered in the same colour as the
