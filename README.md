@@ -34,10 +34,10 @@ radians).
 - angle = seconds\_since\_midnight ÷ 86400 × 2 × π
 
 And the saturation value (radius).
-This generates values oscillating  between 15 and 45. It is most saturated
+This generates values oscillating  between 30 and 50. It is most saturated
 on second 0 of the minute, least saturated on second 30.
 
-- radius = 30 + cos(current\_second ÷ 60 × 2 × π) × 15
+- radius = 40 + cos(current\_second ÷ 60 × 2 × π) × 10
 
 From the angle and radius, the a\* and b\* values can be calculated.
 Note that the hue angle is being rotated by 45° (¼π), and that a negative
@@ -50,15 +50,16 @@ noon, purple and magenta in the afternoon/evening, before returning to red.
 
 Finally, the L\* value can be calculated. This varies over the course of
 the hour; brightest on minute 0 and darkest on minute 30. The range of values
-used here 10 to 70.
+used here is 40 to 80.
 
-- L = 40 + cos(seconds\_since\_hour ÷ 3600 × 2 × π) × 30
+- L = 60 + cos(seconds\_since\_hour ÷ 3600 × 2 × π) × 20
 
 Now you have the L, a, and b values for the colour coordinates. You can
 convert these back to sRGB colour space for display by first converting the
 L\*a\*b\* to XYZ with the D65 illuminant, then converting the XYZ values to
 sRGB. See the colour library I'm using in [lib/colors.js](lib/colors.js) for details.
 
-Note that I'm also rendering text above the background. For simplicity's sake,
-and to keep it readable, the text is rendered in the same colour as the
-background, with the L value increased by 20.
+Note that I'm also rendering text above the background. The text colour used is
+the same hue as the background, but the saturation is inverted (switch the
+sign in front of the cos when calculating radius), and the L value is
+increased by 20.
