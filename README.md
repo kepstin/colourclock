@@ -17,10 +17,9 @@ It should take any modern timezone name from the
 Calculating the Colour
 ----------------------
 
-Note that all of the colour calculations are done in the CIELAB
-(aka L\*a\*b\*) colour space with D65 illuminant. All calculations are
-done in floating point up until the final display output, when the colours
-are rounded (and clipped) if necessary.
+The colour clock uses the [HUSL](http://husl.boronine.com) colour space
+(revision 3) to calculate the colours used. All calculations are done in
+floating point up to the final conversion to sRGB colours for display.
 
 To calculate the colour, start with the current hour (24 hour clock), minute,
 and second, and calculate these intermediate values:
@@ -28,36 +27,29 @@ and second, and calculate these intermediate values:
 - seconds\_since\_midnight = (current\_hour × 60 × 60) + (current\_minute × 60) + current\_second
 - seconds\_since\_hour = (current\_minute × 60) + current\_second
 
-Now calculate the position on the colour wheel (note that angles are in
-radians).
+Now calculate the colour hue (an angle in degrees).
 
-- angle = seconds\_since\_midnight ÷ 86400 × 2 × π
+- hue = seconds\_since\_midnight ÷ 86400 × 360
 
 And the saturation value (radius).
-This generates values oscillating  between 30 and 50. It is most saturated
+This generates values oscillating between 50 and 100. It is most saturated
 on second 0 of the minute, least saturated on second 30.
 
-- radius = 40 + cos(current\_second ÷ 60 × 2 × π) × 10
+(Note that most cos functions expect an angle in radians, so that's what's
+used here)
 
-From the angle and radius, the a\* and b\* values can be calculated.
-Note that the hue angle is being rotated by 45° (¼π), and that a negative
-sign on the sin operator is used. This causes the zero position to be red,
-and the colours cycle through yellow then green in the morning, blue at
-noon, purple and magenta in the afternoon/evening, before returning to red.
+- saturation = 75 + cos(current\_second ÷ 60 × 2 × π) × 25
 
-- a = -sin(hue - (π ÷ 4)) × radius
-- b = cos(hue - (π ÷ 4)) × radius
+Finally, the lightness value can be calculated.
+This varies over the course of the hour; brightest on minute 0 and darkest on
+minute 30. The range of values used here is 40 to 60.
 
-Finally, the L\* value can be calculated. This varies over the course of
-the hour; brightest on minute 0 and darkest on minute 30. The range of values
-used here is 40 to 80.
+(Again, the argument for the cos function is in radians)
 
-- L = 60 + cos(seconds\_since\_hour ÷ 3600 × 2 × π) × 20
+- lightness = 50 + cos(seconds\_since\_hour ÷ 3600 × 2 × π) × 10
 
-Now you have the L, a, and b values for the colour coordinates. You can
-convert these back to sRGB colour space for display by first converting the
-L\*a\*b\* to XYZ with the D65 illuminant, then converting the XYZ values to
-sRGB. See the colour library I'm using in [lib/colors.js](lib/colors.js) for details.
+The hue, saturation, and lightness arguments can then be used as input to
+the HUSL library, which can convert to sRGB via e.g. the toHex() function.
 
 Note that I'm also rendering text above the background. The text colour used is
 the same hue as the background, but the saturation is inverted (switch the

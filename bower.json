@@ -19,6 +19,7 @@
   ],
   "dependencies": {
     "moment": "~2.8.4",
-    "moment-timezone": "~0.2.5"
+    "moment-timezone": "~0.2.5",
+    "husl": "~5.0.0"
   }
 }

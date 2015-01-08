@@ -11,6 +11,7 @@ bower_components: node_modules
 	node_modules/.bin/bower install
 
 BOWER_LIBS= \
+	bower_components/husl/husl.min.js \
 	bower_components/moment/min/moment.min.js \
 	bower_components/moment-timezone/builds/moment-timezone-with-data-2010-2020.min.js
 
@@ -19,7 +20,7 @@ $(BOWER_LIBS): bower_components
 %.gz : %
 	gzip -9 < $< > $@
 
-public/concat.js: $(BOWER_LIBS) lib/colors.js
+public/concat.js: $(BOWER_LIBS)
 	cat $^ >$@
 
 all: public/index.html.gz public/concat.js.gz
