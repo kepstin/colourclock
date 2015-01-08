@@ -52,9 +52,9 @@ footer {
 		</style>
 		<script src="concat.js"></script>
 <!--
-Brightness: L=70 to L=10
-Saturation: Radius=45 to Radius=15
-Foreground: Add 20 to L
+Brightness: L=80 to L=20
+Saturation: Radius=50 to Radius=30
+Foreground: Add 20 to L, invert saturation
 -->
 		<script>
 var zone=null;
@@ -86,14 +86,19 @@ function doClockStuff() {
 	var seconds = date.second();
 
 	var hue = (((hours - 3) * 60 + minutes) * 60 + seconds) / 86400 * 2 * Math.PI;
-	var radius = 30 + (Math.cos(seconds / 30 * Math.PI) * 15);
-	var a = -Math.sin(hue) * radius;
-	var b = Math.cos(hue) * radius;
-	var bg_l = 40 + (Math.cos((minutes * 60 + seconds) / 60 / 30 * Math.PI) * 30);
+	var bg_radius = 40 + (Math.cos(seconds / 30 * Math.PI) * 10);
+	var fg_radius = 40 - (Math.cos(seconds / 30 * Math.PI) * 10);
+	var a = -Math.sin(hue);
+	var bg_a = a * bg_radius;
+	var fg_a = a * fg_radius;
+	var b = Math.cos(hue);
+	var bg_b = b * bg_radius;
+	var fg_b = b * fg_radius;
+	var bg_l = 60 + (Math.cos((minutes * 60 + seconds) / 60 / 30 * Math.PI) * 20);
 	var fg_l = bg_l + 20;
 
-	var bgcolour = hexrgb($c.Lab(bg_l, a, b).sRGB8());
-	var fgcolour = hexrgb($c.Lab(fg_l, a, b).sRGB8());
+	var bgcolour = hexrgb($c.Lab(bg_l, bg_a, bg_b).sRGB8());
+	var fgcolour = hexrgb($c.Lab(fg_l, fg_a, fg_b).sRGB8());
 
 	document.body.style.backgroundColor = bgcolour;
 	document.body.style.color = fgcolour;
