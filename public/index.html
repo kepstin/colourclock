@@ -76,18 +76,32 @@ function doClockStuff() {
 		date.tz(zone);
 	}
 
+	function clip(arg) {
+		return [
+			Math.min(Math.max(arg[0],0),1),
+			Math.min(Math.max(arg[1],0),1),
+			Math.min(Math.max(arg[2],0),1)
+		];
+	}
+
 	var hours = date.hour();
 	var minutes = date.minute();
 	var seconds = date.second();
 
 	var hue = ((hours * 60 + minutes) * 60 + seconds) / 86400 * 360;
-	var bg_sat = 75 + (Math.cos(seconds / 30 * Math.PI) * 25);
-	var fg_sat = 75 - (Math.cos(seconds / 30 * Math.PI) * 25);
-	var bg_light = 50 + (Math.cos((minutes * 60 + seconds) / 60 / 30 * Math.PI) * 10);
-	var fg_light = bg_light + 20;
 
-	var bgcolour = HUSL.toHex(hue, bg_sat, bg_light);
-	var fgcolour = HUSL.toHex(hue, fg_sat, fg_light);
+	// Calculate the reference colour, then convert to lch for adjustments
+	var bg_light = 50 + (Math.cos((minutes * 60 + seconds) / 60 / 30 * Math.PI) * 10);
+	var ref = HUSL._conv.husl.lch([hue, 90, bg_light]);
+
+	// Absolute offsets for saturation
+	var bg_chroma = (Math.cos(seconds / 30 * Math.PI) * 15) - 15;
+	var fg_chroma = 0 - (Math.cos(seconds / 30 * Math.PI) * 15) - 15;
+
+	var bgcolour = HUSL._conv.rgb.hex(clip(HUSL._conv.lch.rgb(
+		[ref[0], ref[1] + bg_chroma, ref[2]])));
+	var fgcolour = HUSL._conv.rgb.hex(clip(HUSL._conv.lch.rgb(
+		[ref[0] + 20, ref[1] + fg_chroma, ref[2]])));
 
 	document.body.style.backgroundColor = bgcolour;
 	document.body.style.color = fgcolour;
@@ -97,13 +111,6 @@ function doClockStuff() {
 
 	var colourDisplay = document.getElementById("colour");
 	colourDisplay.textContent = fgcolour + " on " + bgcolour;
-}
-function hexrgb(rgb) {
-	function hex(x) {
-		x = Math.round(Math.min(Math.max(x, 0), 255));
-		return ("0" + x.toString(16)).slice(-2);
-	}
-	return "#" + hex(rgb.r) + hex(rgb.g) + hex(rgb.b);
 }
 var abootVisible = false;
 function toggleAboot() {

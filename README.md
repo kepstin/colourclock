@@ -52,6 +52,6 @@ The hue, saturation, and lightness arguments can then be used as input to
 the HUSL library, which can convert to sRGB via e.g. the toHex() function.
 
 Note that I'm also rendering text above the background. The text colour used is
-the same hue as the background, but the saturation is inverted (switch the
-sign in front of the cos when calculating radius), and the L value is
-increased by 20.
+the same hue as the background, but the saturation is calculated differently;
+the sign on the cos is inverted and the range is from 75 to 100. The L value
+is increased by 20.
