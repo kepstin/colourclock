@@ -94,24 +94,19 @@ function doClockStuff() {
 
 	var hue = ((hours * 60 + minutes) * 60 + seconds) / 86400 * 360;
 
-	// Calculate the reference colour, then convert to lch for adjustments
+	var bg_sat = 75 + (Math.cos(seconds / 30 * Math.PI) * 15);
+	var fg_sat = 75 - (Math.cos(seconds / 30 * Math.PI) * 15);
+
 	var bg_light = 50 + (Math.cos((minutes * 60 + seconds) / 60 / 30 * Math.PI) * 10);
-	var ref = HUSL._conv.husl.lch([hue, 90, bg_light]);
 
-	// Absolute offsets for saturation
-	var bg_chroma, fg_chroma;
-	if (fadeMinutes) {
-		bg_chroma = (Math.cos(seconds / 30 * Math.PI) * 15) - 15;
-		fg_chroma = 0 - (Math.cos(seconds / 30 * Math.PI) * 15) - 15;
-	} else {
-		bg_chroma = 0;
-		fg_chroma = 0;
-	}
+	var bgcolour = HUSL.toHex(hue, bg_sat, bg_light)
 
-	var bgcolour = HUSL._conv.rgb.hex(clip(HUSL._conv.lch.rgb(
-		[ref[0], ref[1] + bg_chroma, ref[2]])));
+	// Colours change depending on lightness in HUSL, so do the offset
+	// in lch
+
+	var fglch = HUSL._conv.husl.lch([hue, fg_sat, bg_light]);
 	var fgcolour = HUSL._conv.rgb.hex(clip(HUSL._conv.lch.rgb(
-		[ref[0] + 20, ref[1] + fg_chroma, ref[2]])));
+		[fglch[0] + 20, fglch[1], fglch[2]])));
 
 	document.body.style.backgroundColor = bgcolour;
 	document.body.style.color = fgcolour;
