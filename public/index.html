@@ -94,8 +94,14 @@ function doClockStuff() {
 
 	var hue = ((hours * 60 + minutes) * 60 + seconds) / 86400 * 360;
 
-	var bg_sat = 75 + (Math.cos(seconds / 30 * Math.PI) * 15);
-	var fg_sat = 75 - (Math.cos(seconds / 30 * Math.PI) * 15);
+	var bg_sat, fg_sat;
+	if (fadeMinutes) {
+		bg_sat = 75 + (Math.cos(seconds / 30 * Math.PI) * 15);
+		fg_sat = 75 - (Math.cos(seconds / 30 * Math.PI) * 15);
+	} else {
+		bg_sat = 90;
+		fg_sat = 90;
+	}
 
 	var bg_light = 50 + (Math.cos((minutes * 60 + seconds) / 60 / 30 * Math.PI) * 10);
 
