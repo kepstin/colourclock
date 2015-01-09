@@ -69,10 +69,12 @@ function setupZone() {
 	} else {
 		zone = null;
 	}
+	doClockStuff();
 }
 var fadeMinutes = true;
 function toggleMinutes() {
 	fadeMinutes = !fadeMinutes;
+	doClockStuff();
 }
 function doClockStuff() {
 	var date = new moment();
@@ -170,7 +172,6 @@ function toggleClock() {
 		<script>
 			setupZone();
 			window.onhashchange = setupZone;
-			doClockStuff();
 			window.setInterval(doClockStuff, 1000);
 		</script>
 <script>
