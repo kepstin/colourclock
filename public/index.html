@@ -70,9 +70,9 @@ function setupZone() {
 		zone = null;
 	}
 }
-var minutes = true;
+var fadeMinutes = true;
 function toggleMinutes() {
-	minutes = !minutes;
+	fadeMinutes = !fadeMinutes;
 }
 function doClockStuff() {
 	var date = new moment();
@@ -100,7 +100,7 @@ function doClockStuff() {
 
 	// Absolute offsets for saturation
 	var bg_chroma, fg_chroma;
-	if (minutes) {
+	if (fadeMinutes) {
 		bg_chroma = (Math.cos(seconds / 30 * Math.PI) * 15) - 15;
 		fg_chroma = 0 - (Math.cos(seconds / 30 * Math.PI) * 15) - 15;
 	} else {
