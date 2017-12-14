@@ -17,7 +17,7 @@ It should take any modern timezone name from the
 Calculating the Colour
 ----------------------
 
-The colour clock uses the [HUSL](http://husl.boronine.com) colour space
+The colour clock uses the [HSLuv](http://www.hsluv.org/) (formerly HUSL) colour space
 (revision 3) to calculate the colours used. All calculations are done in
 floating point up to the final conversion to sRGB colours for display.
 
